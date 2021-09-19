@@ -27,11 +27,12 @@ jobs:
         with:
           fetch-depth: 100
 
-      - name: Sets the build SHA
+      - name: Sets the env version
+        run: echo "VERSION=$(git describe --tags --always --abbrev=0 2>/dev/null)" >> $GITHUB_ENV
+
+      - name: Sets the env SHA
         if: env.SHA == null
-        run: |
-          echo "SHA=${GITHUB_SHA::7}" >> $GITHUB_ENV
-          echo "VERSION=$(git describe --tags --always --abbrev=0 2>/dev/null)" >> $GITHUB_ENV
+        run: echo "SHA=${GITHUB_SHA::7}" >> $GITHUB_ENV
 
       - name: Install and run Luacheck
         uses: nebularg/actions-luacheck@v1
