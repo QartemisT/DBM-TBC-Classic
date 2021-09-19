@@ -28,7 +28,7 @@ jobs:
           fetch-depth: 100
 
       - name: Sets the env version
-        run: echo "VERSION=$(git describe --tags --always --abbrev=7 2>/dev/null) | sed 's/-g[a-z0-9]\{7\}//'" >> $GITHUB_ENV
+        run: echo "VERSION=$(git describe --tags --always --abbrev=7 2>/dev/null | sed 's/-g[a-z0-9]\{7\}//')" >> $GITHUB_ENV
 
       - name: Sets the env SHA
         if: env.SHA == null
