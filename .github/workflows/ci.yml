@@ -19,10 +19,17 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    env:
+      SHA: ${{ github.event.inputs.SHA }}
+
     steps:
       - uses: actions/checkout@v1
         with:
           fetch-depth: 100
+
+      - name: Sets the build SHA
+        if: env.SHA == null
+        run: echo "SHA=${GITHUB_SHA::7}" >> $GITHUB_ENV
 
       - name: Install and run Luacheck
         uses: nebularg/actions-luacheck@v1
@@ -33,7 +40,7 @@ jobs:
         uses: BigWigsMods/packager@master
         if: ${{ github.event_name != 'pull_request' }}
         with:
-          args: -g bcc -n "{package-name}-${{ github.event.inputs.SHA || ${ GITHUB_SHA } }}{classic}"
+          args: -g bcc -n "{package-name}-${{ env.SHA }}{classic}"
         env:
           CF_API_KEY: ${{ secrets.CF_API_KEY }}
           GITHUB_OAUTH: ${{ secrets.GITHUB_TOKEN }}
